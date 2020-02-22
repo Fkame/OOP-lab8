@@ -16,6 +16,18 @@ public class Crawler {
 	// Точка входа
 	public static void main (String[] args) {
 		
+		Crawler crawler = new Crawler();
+		
+		URLDepthPair urlDepth = crawler.getURLDepthPairFromArgs();
+		if (urlDepth == null) {
+			System.out.println("Args are empty or have exception. Now you need to enter URL and depth manually!");
+			
+			
+		}
+		
+		
+		
+		
 		String url;
 		int depth = 0;
 		
@@ -65,11 +77,41 @@ public class Crawler {
 	/*
 	* Получение аргументов командной строки
 	*/
-	private URLDepthPair getURLDepthPair() {
+	private URLDepthPair getURLDepthPairFromArgs() {
 		
+		// Вызывает ли исключение, генерируемое конструктором класса (вызовается, если не понравится какой-либо параметр)
+		URLDepthPair urlDepth = new 
+		try {
+			
+		} catch () {
+			
+		}
 	}
 	
 	/*
 	* Получение пользовательского ввода
 	*/
+	private URLDepthPair getURLDepthPairFromInput() {
+		// Временные переменные для хранения
+		String url;
+		int depth;
+		
+		url = args[0];
+		// Проверка префикса адреса
+			
+		try {
+			depth = Integer.parseInt(args[1]);
+		} catch (Exception e) {
+			System.out.println("Error depth - args[1] parameter!");
+			return null;
+		}
+		
+		URLDepthPair urlDepth =  new URLDepthPair(url, depth);
+		
+		return urlDepth;
+		
+		
+		
+		
+	}
 }
