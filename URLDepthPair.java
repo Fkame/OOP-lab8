@@ -19,7 +19,7 @@ public class URLDepthPair {
 		} 
 		
 		if (!URLDepthPair.isHttpPrefixInURL(url)) {
-			MalformedURLException ex = new MalformedURLException();
+			MalformedURLException ex = new MalformedURLException("Error of url prefix");
 			throw ex;
 		}
 		
@@ -33,6 +33,14 @@ public class URLDepthPair {
 	public static boolean isHttpPrefixInURL(String url) {
 		if (!url.startsWith(URL_PREFIX)) return false;
 		return true;
+	}
+	
+	/*
+	* Поверяет глубину на превышение лимита
+	*/	
+	public static boolean isDepthAboveLimit(int depth) {
+		if (depth > MAX_DEPTH_VALUE) return true;
+		return false;
 	}
 	
 	/*
