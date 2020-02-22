@@ -47,7 +47,7 @@ public class URLDepthPair {
 	* Переопределение toString();
 	*/
 	public String toString() {
-		return new String("[ " + this.url + "," + this.depth + " ]");
+		return new String("[ " + this.url + ", " + this.depth + " ]");
 	}
 	
 	/* 
@@ -59,5 +59,12 @@ public class URLDepthPair {
 	
 	public int getDepth() {
 		return this.depth;
+	}
+	
+	public void setDepth(int depth) {
+		if (depth < 0 || depth > MAX_DEPTH_VALUE) {
+			throw new IllegalArgumentException("Error limits of depth");
+		} 
+		this.depth = depth;
 	}
 }
