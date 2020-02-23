@@ -170,4 +170,10 @@ public class CrawlerHelper {
 		return info;
 		
 	}
+	
+	public String getURLFromHTMLTag(String line) {
+		int indexStart = line.indexOf("\"");
+		
+		return null;
+	}
 }

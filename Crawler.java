@@ -60,10 +60,12 @@ public class Crawler {
 			// И как раз вот здесь берётся новый, а старый удаляется из списка
 			// а код выше нужен, чтобы войти в цикл
 			nowPage = notVisitedList.getFirst();
-
+			
+			Socket socket = null;
+			
 			try {
 				// Открываем сокет
-				Socket socket = new Socket(nowPage.getHostName(), HTTP_PORT);
+				socket = new Socket(nowPage.getHostName(), HTTP_PORT);
 				System.out.println("Connection to [ " + nowPage.getURL() + " ] created!");
 
 				// Установка таймаута
@@ -72,7 +74,7 @@ public class Crawler {
 				}
 				catch (SocketException exc) {
 					System.err.println("SocketException: " + exc.getMessage());
-					moveURLPair(nowPage);
+					moveURLPair(nowPage, socket);
 					continue;
 				}
 
@@ -98,7 +100,7 @@ public class Crawler {
 					System.out.println("ERROR: BAD REQUEST!");
 					System.out.println(line + "\n");
 
-					this.moveURLPair(nowPage);
+					this.moveURLPair(nowPage, socket);
 					continue;
 				} else {
 					System.out.println("REQUEST IS GOOD!\n");
@@ -162,11 +164,11 @@ public class Crawler {
 				System.out.println("---End of file---\n");
 
 				// Закрытие сокета
-				socket.close();
+				//socket.close();
 				System.out.println("Page had been closed\n");
 
 				//Удаление страницы из списка непросмотренных и добавление в список просмотренных
-				moveURLPair(nowPage);
+				moveURLPair(nowPage, socket);
 
 				// Ещё одна избыточность, для правльной работы цикла в случае, когда не возникло ошибок
 				nowPage = notVisitedList.getFirst();
@@ -174,12 +176,12 @@ public class Crawler {
 			}
 			catch (UnknownHostException e) {
 				e.printStackTrace();
-				this.moveURLPair(nowPage);
+				this.moveURLPair(nowPage, socket);
 				continue;
 			}
 			catch (IOException e) {
 				e.printStackTrace();
-				this.moveURLPair(nowPage);
+				this.moveURLPair(nowPage, socket);
 				continue;
 			}
 		}
@@ -252,9 +254,20 @@ public class Crawler {
 	* Перевод страницы из списка непросмотренных в просмотренные
 	* Оба списка работают хранят данные по времени их добавления
 	*/
-	private void moveURLPair(URLDepthPair pair) {
+	private void moveURLPair(URLDepthPair pair, Socket socket) {
 		this.visitedList.addLast(pair);
 		this.notVisitedList.removeFirst();
+		
+		try {
+			// Закрытие сокета
+			socket.close();
+		}
+		catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();	
+		}
 	}
 
 	/*
