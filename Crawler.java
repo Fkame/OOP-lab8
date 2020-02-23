@@ -8,8 +8,11 @@ public class Crawler {
 
 	public static final int HTTP_PORT = 80;
 	public static final String HOOK_REF = "<a href=\"";
-	public static final String HOOK_REF2 = "<a href=\"http://";
+	public static final String HOOK_HTTP = "<a href=\"http://";
+	public static final String HOOK_HTTPS = "<a href=\"https://";
+	public static final String HOOK_BACK = "<a href=\"../";
 	public static final String BAD_REQUEST_LINE = "HTTP/1.1 400 Bad Request";
+	
 
 	// Данные для тестирования без ввода
 	public static final String testURL = "http://users.cms.caltech.edu/~donnie/cs11/java/";
@@ -59,12 +62,15 @@ public class Crawler {
 			// потому что идти далее не будет иметь смысла, значит нужно удалить элемент при ошибке, и взять новый
 			// И как раз вот здесь берётся новый, а старый удаляется из списка
 			// а код выше нужен, чтобы войти в цикл
+			
+			//System.out.println("Trying to get next page in start of cycle");
 			nowPage = notVisitedList.getFirst();
 			
 			Socket socket = null;
 			
 			try {
 				// Открываем сокет
+				//System.out.println("Trying to connect to " + nowPage.getHostName());
 				socket = new Socket(nowPage.getHostName(), HTTP_PORT);
 				System.out.println("Connection to [ " + nowPage.getURL() + " ] created!");
 
@@ -110,18 +116,63 @@ public class Crawler {
 				System.out.println("---Start of file---");
 
 				// В цикле ниже происходит поиск и сбок всех ссылок со страницы
-				int strCount = 1;
+				// Для этого осуществляется просмотр всех строк html-кода страницы
+				int strCount = 0;
+				int strCount2 = 0;
 				while(line != null) {
 					// На всякий случай обработка исключений, потому что bufferedReader может вполне выкинуть его
 					try {
 						/*
 						* Вывод только строк с ссылками на http страницы
 						* Или на подстраницы данного хоста
+						* Или чего-то вроде ../url.html - это возврат назад и переход на другой уровень
 						*/
+						
+						//Извлечнение строки из html-кода
 						line = in.readLine();
-
-						// Если ссылка начинается с "http://"
-						if (line.indexOf(HOOK_REF2) != -1) {
+						strCount += 1;
+						
+						// Извлечение ссылки из тэга, если она там есть, если нет, идём к следующей строке
+						String url = CrawlerHelper.getURLFromHTMLTag(line);
+						if (url == null) continue;
+						
+						// Если ссылка ведёт на сайт с протоколом https - пропускаем
+						if (url.startsWith("https://")) {
+							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> https-refference\n");
+							continue;
+						}
+						
+						// Если ссылка - ссылка с возвратом
+						if (url.startsWith("../")) {		
+							String newUrl = CrawlerHelper.urlFromBackRef(nowPage.getURL(), url);
+							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> " +  newUrl + "\n");
+							this.createURlDepthPairObject(newUrl, nowPage.getDepth() + 1);
+						} 
+						
+						// Если это новая http ссылка
+						else if (url.startsWith("http://")) {
+							String newUrl = CrawlerHelper.cutTrashAfterFormat(url);
+							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> " + newUrl + "\n");
+							this.createURlDepthPairObject(newUrl, nowPage.getDepth() + 1);
+						} 
+						
+						// Значит, это подкаталог, возможно у него будет мусор. После очистки можно клеить с основной ссылкойю
+						else {
+							//System.out.println("This ref is subcatalog!");
+							String newUrl = CrawlerHelper.cutURLEndFormat(nowPage.getURL()) + "/" + url;
+							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> " + newUrl + "\n");
+							this.createURlDepthPairObject(newUrl, nowPage.getDepth() + 1);
+						}
+						
+						/*
+						
+						// Если ссылка начинается с "https://" - нужно её пропустить
+						if (line.indexOf(HOOK_HTTPS) != -1) continue;
+						
+						if (line.indexOf(HOOK_BACK) != -1) continue;
+						
+						// Если ссылка начинается с "http://" - значит это полноценная ссылка, а не подкаталог
+						if (line.indexOf(HOOK_HTTP) != -1) {
 							System.out.println(strCount + " |  " + line);
 
 							// Извлечение ссылки
@@ -153,39 +204,45 @@ public class Crawler {
 							int nextDepth = nowPage.getDepth() + 1;
 							URLDepthPair newURL = new URLDepthPair(fullSubRef, nextDepth);
 							notVisitedList.addLast(newURL);
+							
 						}
-						strCount += 1;
+						*/
+						
+						strCount2 += 1;
 					}
 					catch (Exception e) {
 						break;
 					}
 				}
+				
 				if (strCount == 1) System.out.println("No http refs in this page!");
 				System.out.println("---End of file---\n");
 
-				// Закрытие сокета
-				//socket.close();
 				System.out.println("Page had been closed\n");
-
-				//Удаление страницы из списка непросмотренных и добавление в список просмотренных
-				moveURLPair(nowPage, socket);
-
-				// Ещё одна избыточность, для правльной работы цикла в случае, когда не возникло ошибок
-				nowPage = notVisitedList.getFirst();
+				
+				//System.out.println("Trying to get next page in end of cycle");
+				//System.out.println("Success!");
+				//System.out.println("Not visited list: " + notVisitedList.toString());
 
 			}
 			catch (UnknownHostException e) {
-				e.printStackTrace();
-				this.moveURLPair(nowPage, socket);
-				continue;
+				System.out.println("!!Opps, UHE catched!!, so " + nowPage.getURL() + "is not workable now!");
+				//e.printStackTrace();
+				//this.moveURLPair(nowPage, socket);
+				//continue;
 			}
 			catch (IOException e) {
 				e.printStackTrace();
-				this.moveURLPair(nowPage, socket);
-				continue;
+				//this.moveURLPair(nowPage, socket);
+				//continue;
 			}
+			
+			// Перемещение сайта после просмотра в список просмотренных
+			moveURLPair(nowPage, socket);
+			
+			// Ещё одна избыточность, для правльной работы цикла в случае, когда не возникло ошибок
+			nowPage = notVisitedList.getFirst();
 		}
-
 		/*
 		while (!this.notVisitedList.isEmpty()) {
 			URLDepthPair element = this.notVisitedList.getFirst();
@@ -258,6 +315,8 @@ public class Crawler {
 		this.visitedList.addLast(pair);
 		this.notVisitedList.removeFirst();
 		
+		if (socket == null) return;
+		
 		try {
 			// Закрытие сокета
 			socket.close();
@@ -269,6 +328,25 @@ public class Crawler {
 			e.printStackTrace();	
 		}
 	}
+	
+	/*
+	* Создаёт новый объект-пару и по ноебходимости переводит из одного списка в другой
+	* Если передать булевый параметр false, то вместо socket можно отправлять null
+	*/ 
+	private void createURlDepthPairObject(String url, int depth) {
+		
+		URLDepthPair newURL = null;
+		try{
+			// Формироване нового объекта и добавление его в список
+			newURL = new URLDepthPair(url, depth);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		notVisitedList.addLast(newURL);
+		
+		//if (needToChangeLists) moveURLPair(newURL, socket);
+	}
+	
 
 	/*
 	* Получение списков
@@ -414,7 +492,7 @@ public class Crawler {
 					*/
 					line = in.readLine();
 
-					if (line.indexOf(HOOK_REF2) != -1)
+					if (line.indexOf(HOOK_HTTP) != -1)
 						System.out.println(strCount + " |  " + line);
 					else if (line.indexOf(HOOK_REF) != -1)
 					{

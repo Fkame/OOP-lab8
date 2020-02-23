@@ -6,6 +6,13 @@ import java.io.*;
 
 public class CrawlerHelper {
 	
+	// Набор форматов, которые поддерживает браузер
+	public static String[] formats = {".html", ".pdf", ".java", ".xml", "txt", ".css", ".doc", ".c"};
+	
+	// Начало ссылки
+	//public static final String HOOK_REF = "<a href=\"";
+	
+	
 	/*
 	* Общий алгоритм для проверки аргументов
 	*/
@@ -81,32 +88,7 @@ public class CrawlerHelper {
 		
 		return urlDepth;
 		
-		/*
-		System.out.println("Enter URL:");
-		url = in.next();
-			
-		// Очистка буфера
-		if (in.hasNextLine()) {
-			System.out.println("There is flood symbols in input buffer - need to clear: " + in.nextLine());
-		}
-			
-		// Ввод глубины
-		System.out.println("Enter depth:");
-		while (true) {
-				
-			// Если буфер пустой - сканер запросит ввод, а потом уже проверит его
-			if (in.hasNextInt()) {
-				depth = in.nextInt();
-				break;
-			}
-			else {
-				System.out.println("\nError depth - try again:");
-					
-				// Очистка буффера ввода
-				in.nextLine();
-			}
-		}
-		*/
+		
 		
 	}
 	
@@ -171,9 +153,66 @@ public class CrawlerHelper {
 		
 	}
 	
-	public String getURLFromHTMLTag(String line) {
-		int indexStart = line.indexOf("\"");
+	/*
+	* Обработка строк ссылочного тэга <a href=...>
+	*/
+	// Выделение ссылки из текста тэга
+	public static String getURLFromHTMLTag(String line) {
+		if (line.indexOf(Crawler.HOOK_REF) == -1) return null;
 		
-		return null;
+		int indexStart = line.indexOf(Crawler.HOOK_REF) + Crawler.HOOK_REF.length();
+		int indexEnd = line.indexOf("\"", indexStart);
+		// Если получится так, что кавычек больше нет
+		if (indexEnd == -1) return null;
+		
+		//System.out.println("Start = " + indexStart + ", index end = " + indexEnd);
+		
+		return line.substring(indexStart, indexEnd);
 	}
+	
+	// Отрезает от адреса .html и прочее 
+	public static String cutURLEndFormat(String url) {
+		//System.out.println("Before cutTrash for cut format " + url);
+		url = CrawlerHelper.cutTrashAfterFormat(url);
+		//System.out.println("After " + url);
+		
+		for (String format : formats) {
+			//if (url.indexOf(format) != -1) {
+			if (url.endsWith(format)) {
+				//System.out.println("Found " + format + " on index " + url.indexOf(format));
+				return url.substring(0, url.indexOf(format));
+			}
+		}
+		return url;
+	}
+	
+	// Склейка ссылки с возвратом с полной текущей ссылкой
+	public static String urlFromBackRef(String url, String backRef) {
+		int count = 2;
+		int index = url.length();
+		
+		//url = CrawlerHelper.cutTrashAfterFormat(url);
+		
+		char[] urlSequnce = url.toCharArray();
+		while (count > 0 && index > 0) {
+			index -= 1;
+			if (urlSequnce[index] == '/') count -= 1;
+		}
+		
+		if (index == 0) return null;
+		
+		String cutURL = url.substring(0, index + 1);
+		String cutBackRef = backRef.substring(3, backRef.length());
+		
+		return (cutURL + cutBackRef);
+	}
+	
+	// Очистка лишней вохможной информации после указания формата в адресе
+	public static String cutTrashAfterFormat(String url) {
+		int index = url.lastIndexOf("#");
+		if (index == -1) return url;
+		return url.substring(0, index);
+		
+	}
+	
 }
