@@ -1,6 +1,8 @@
 import java.lang.Exception;
 import java.util.*;
 import java.net.MalformedURLException;
+import java.net.*;
+import java.io.*;
 
 public class CrawlerHelper {
 	
@@ -108,4 +110,64 @@ public class CrawlerHelper {
 		
 	}
 	
+	/*
+	* Вывод информации по интересующему URL
+	*/
+	public static String[] getInfoAboutUrl(URL url, boolean needToOut) {
+		
+		String[] info = new String[10];
+		info[0] = url.toString();
+		info[1] = url.getHost();
+		try {
+			info[2] = url.getContent().toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+			info[2] = "";
+		}
+		info[3] = url.getProtocol();
+		info[4] = url.getPath();
+		info[5] = url.getUserInfo();
+		info[6] = url.getFile();
+		info[7] = url.getRef();
+		try {
+			info[8] = url.toURI().toString();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			info[8] = "";
+		}
+		info[9] = String.valueOf(url.getPort());
+		
+		if (needToOut) {
+			System.out.println("\n---Info about this url---");
+			System.out.println("Full url: " + info[0]);
+			System.out.println("Host name of url: " + info[1]);
+			System.out.println("Content of url: " + info[2]);
+			System.out.println("Protocol of url: " + info[3]);
+			System.out.println("Path of url: " + info[4]);
+			System.out.println("UserInfo of url: " + info[5]);
+			System.out.println("Files on url: " + info[6]);
+			System.out.println("Ref of url: " + info[7]);
+			System.out.println("URI of url: " + info[8]);
+			System.out.println("Port of url: " + info[9]);
+			System.out.println("---------------------------\n");
+		}
+		
+		return info;
+	}
+	
+	public static String[] getInfoAboutUrl(String urlStr, boolean needToOut) {
+		URL url = null;
+		try {
+			url = new URL(urlStr);
+		}
+		catch (MalformedURLException e) {
+			System.err.println("MalformedURLException: " + e.getMessage());
+			return null;
+		}
+		
+		String[] info = getInfoAboutUrl(url, needToOut);
+		
+		return info;
+		
+	}
 }

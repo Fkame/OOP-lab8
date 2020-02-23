@@ -1,4 +1,5 @@
 import java.net.MalformedURLException;
+import java.net.URL;
 
 public class URLDepthPair {
 	
@@ -53,6 +54,17 @@ public class URLDepthPair {
 	/* 
 	* Получение параметров
 	*/
+	public String getHostName() {
+		try {
+            URL url = new URL(this.url);
+            return url.getHost();
+        }
+        catch (MalformedURLException e) {
+            System.err.println("MalformedURLException: " + e.getMessage());
+            return null;
+        }
+	}
+	
 	public String getURL() {
 		return this.url;
 	}
@@ -66,5 +78,27 @@ public class URLDepthPair {
 			throw new IllegalArgumentException("Error limits of depth");
 		} 
 		this.depth = depth;
+	}
+	
+	public static String fullUrlStringToHostName(String in) {
+		try {
+            URL url = new URL(in);
+            return url.getHost();
+        }
+        catch (MalformedURLException e) {
+            System.err.println("MalformedURLException: " + e.getMessage());
+            return null;
+        }
+	}
+	
+	public static URL getUrlObjectFromUrlString(String urlStr) {
+		try {
+            URL url = new URL(urlStr);
+            return url;
+        }
+        catch (MalformedURLException e) {
+            System.err.println("MalformedURLException: " + e.getMessage());
+            return null;
+        }
 	}
 }
