@@ -65,6 +65,17 @@ public class URLDepthPair {
         }
 	}
 	
+	public String getPagePath() {
+		try {
+			URL url = new URL(this.url);
+            return url.getPath();
+        }
+        catch (MalformedURLException e) {
+            System.err.println("MalformedURLException: " + e.getMessage());
+            return null;
+        }
+	}
+	
 	public String getURL() {
 		return this.url;
 	}
