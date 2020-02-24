@@ -7,12 +7,7 @@ import java.io.*;
 public class CrawlerHelper {
 	
 	// Набор форматов, которые поддерживает браузер
-	public static String[] formats = {".html", ".pdf", ".java", ".xml", "txt", ".css", ".doc", ".c"};
-	
-	//public static String INDEX_ENDING = "index.html";
-	// Начало ссылки
-	//public static final String HOOK_REF = "<a href=\"";
-	
+	public static String[] formats = {".html", ".pdf", ".java", ".xml", "txt", ".css", ".doc", ".c"};	
 	
 	/*
 	* Общий алгоритм для проверки аргументов
@@ -86,11 +81,7 @@ public class CrawlerHelper {
 			urlDepth = this.getURLDepthPairFromArgs(args);
 			if (urlDepth == null) System.out.println("Try again!\n");
 		}
-		
-		return urlDepth;
-		
-		
-		
+		return urlDepth;	
 	}
 	
 	/*
@@ -133,8 +124,7 @@ public class CrawlerHelper {
 			System.out.println("URI of url: " + info[8]);
 			System.out.println("Port of url: " + info[9]);
 			System.out.println("---------------------------\n");
-		}
-		
+		}		
 		return info;
 	}
 	
@@ -148,8 +138,7 @@ public class CrawlerHelper {
 			return null;
 		}
 		
-		String[] info = getInfoAboutUrl(url, needToOut);
-		
+		String[] info = getInfoAboutUrl(url, needToOut);	
 		return info;
 		
 	}
@@ -218,15 +207,4 @@ public class CrawlerHelper {
 		return url.substring(0, index);
 		
 	}
-	
-	/*
-	// Отрезка index.html
-	public static String cutIndexFromEnd(String url) {
-		if (url.endsWith(INDEX_ENDING)) {
-			return url.substring(0, url.length() - INDEX_ENDING.length());
-		}
-		return url;
-	}
-	*/
-	
 }

@@ -44,21 +44,11 @@ public class CrawlerHelperTest {
 		System.out.println("After cutting trash: [" + getURL + "]");
 		System.out.println("");
 		
-		
-		
-		/*
-		// Проверка отрезки index.html
-		testURL = " http://users.cms.caltech.edu/~donnie/cs11/java/lab1/index.html";
-		getURL = CrawlerHelper.cutIndexFromEnd(testURL);
-		System.out.println("Before cutting index.html: [" + testURL + "]");
-		System.out.println("After cutting index.html: [" + getURL + "]");
+		// Тест определения принудительного перехода на https протокол
+		testURL = "http://download.oracle.com/javase/tutorial/essential/concurrency/sync.html";
+		System.out.println("What protocol inside? : [" + testURL + "]");
+		System.out.println("True answer: [https], test answer: [" + CrawlerHelper.whatProtocolInside(testURL) + "]");
 		System.out.println("");
 		
-		testURL = " http://users.cms.caltech.edu/~donnie/cs11/java/lab1/";
-		getURL = CrawlerHelper.cutIndexFromEnd(testURL);
-		System.out.println("Before cutting index.html: [" + testURL + "]");
-		System.out.println("After cutting index.html: [" + getURL + "]");
-		System.out.println("");
-		*/
 	}
 }

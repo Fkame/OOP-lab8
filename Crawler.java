@@ -26,7 +26,6 @@ public class Crawler {
 	// Глубина поиска
 	int depth;
 
-
 	// Конструктор
 	public Crawler() {
 		notVisitedList = new LinkedList<URLDepthPair>();
@@ -40,9 +39,7 @@ public class Crawler {
 		Crawler crawler = new Crawler();
 
 		crawler.getFirstURLDepthPair(args);
-
 		crawler.startParse();
-
 		crawler.showResults();
 		//crawler.testParse();
 	}
@@ -159,64 +156,13 @@ public class Crawler {
 						// Значит, это подкаталог, возможно у него будет мусор
 						// Или содержит название файла в конце
                         // После очистки можно клеить с основной ссылкой
-						else {
-							//System.out.println("This ref is subcatalog!");
-							
+						else {		
 							String newUrl;
 							newUrl = CrawlerHelper.cutURLEndFormat(nowPage.getURL()) + url;
 							
-							//if (oldUrl.endsWith("/")) {
-								//newUrl = CrawlerHelper.cutURLEndFormat(oldUrl) + url;
-							//} else {
-								//newUrl = CrawlerHelper.cutURLEndFormat(oldUrl) + "/" + url;
-							//}
 							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> " + newUrl + "\n");
 							this.createURlDepthPairObject(newUrl, nowPage.getDepth() + 1);
 						}
-						
-						/*
-						
-						// Если ссылка начинается с "https://" - нужно её пропустить
-						if (line.indexOf(HOOK_HTTPS) != -1) continue;
-						
-						if (line.indexOf(HOOK_BACK) != -1) continue;
-						
-						// Если ссылка начинается с "http://" - значит это полноценная ссылка, а не подкаталог
-						if (line.indexOf(HOOK_HTTP) != -1) {
-							System.out.println(strCount + " |  " + line);
-
-							// Извлечение ссылки
-							int indexStart = line.indexOf(HOOK_REF) + HOOK_REF.length();
-							int indexEnd = line.indexOf("\"", indexStart);
-							String fullRef = line.substring(indexStart, indexEnd);
-
-							System.out.println("Full ref = " + fullRef + "\n");
-
-							// Формироване нового объекта и добавление его в список
-							int nextDepth = nowPage.getDepth() + 1;
-							URLDepthPair newURL = new URLDepthPair(fullRef, nextDepth);
-							notVisitedList.addLast(newURL);
-						}
-						else if (line.indexOf(HOOK_REF) != -1)
-						{
-							// Извлечение адреса из тэга ссылки в html
-							int indexStart = line.indexOf(HOOK_REF) + HOOK_REF.length();
-							int indexEnd = line.indexOf("\"", indexStart);
-							String subRef = line.substring(indexStart, indexEnd);
-
-							// Полученная ссылка, скорее всего подкаталог, нужно объеденить с текущим путем,
-							// преобразовать полученную строку в полную ссылку для создания объекта
-							String fullSubRef = nowPage.getURL() + subRef;
-
-							System.out.println(strCount + " |  " + line + " --> [" + subRef + "] --> " + indexStart + ", " + indexEnd);
-							System.out.println("Full ref = " + fullSubRef + "\n");
-
-							int nextDepth = nowPage.getDepth() + 1;
-							URLDepthPair newURL = new URLDepthPair(fullSubRef, nextDepth);
-							notVisitedList.addLast(newURL);
-							
-						}
-						*/
 						
 						strCount2 += 1;
 					}
@@ -230,23 +176,13 @@ public class Crawler {
 
 				System.out.println("Page had been closed\n");
 				
-				//System.out.println("Trying to get next page in end of cycle");
-				//System.out.println("Success!");
-				//System.out.println("Not visited list: " + notVisitedList.toString());
-
 			}
 			catch (UnknownHostException e) {
 				System.out.println("Opps, UnknownHostException catched, so [" + nowPage.getURL() + "] is not workable now!");
-				//e.printStackTrace();
-				//this.moveURLPair(nowPage, socket);
-				//continue;
 			}
 			catch (IOException e) {
 				e.printStackTrace();
-				//this.moveURLPair(nowPage, socket);
-				//continue;
 			}
-			
 			
 			// Перемещение сайта после просмотра в список просмотренных
 			moveURLPair(nowPage, socket);
@@ -254,68 +190,6 @@ public class Crawler {
 			// Ещё одна избыточность, для правльной работы цикла в случае, когда не возникло ошибок
 			nowPage = notVisitedList.getFirst();
 		}
-		/*
-		while (!this.notVisitedList.isEmpty()) {
-			URLDepthPair element = this.notVisitedList.getFirst();
-			nowDepth = element.getDepth();
-
-			System.out.println("Now on " + element.toString() + " /" + this.depth);
-
-			// Если глубина текущего элемента равна заданному порогу, то в нём уже не нужно
-			// искать ссылки.
-			// Оба списка работают по принципу FIFO
-			this.notVisitedList.removeFirst();
-			if (nowDepth == depth) {
-				this.visitedList.addLast(element);
-				//this.notVisitedList.removeFirst();
-				continue;
-			}
-
-			// Если данный уровень ещё не предел - проводим его парсинг
-
-			String host = element.getHostName();
-
-			Socket socket = null;
-			//OutputStreamReader stream = null;
-			PrintWriter readStream = null;
-
-			// Открытие сокета
-			try {
-				socket = new Socket(host, HTTP_PORT);
-				System.out.println("Socket opened: " + host);
-				System.out.println("");
-
-			}
-			catch (UnknownHostException e) {
-				System.err.println("UnknownHostException: " + e.getMessage() + "\n");
-				continue;
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-				continue;
-			}
-
-			// Установка таймаута
-			try {
-				socket.setSoTimeout(5000);
-			}
-			catch (SocketException exc) {
-				System.err.println("SocketException: " + exc.getMessage());
-				continue;
-			}
-
-
-			// Закрытие сокета
-			try {
-				socket.close();
-				System.out.println("Page had been closed\n");
-			}
-			catch (IOException e) {
-				System.out.println("URL ERROR SOCKET CLOSING: " + host + "\n");
-			}
-
-		}
-		*/
 	}
 
 	/*
@@ -354,8 +228,6 @@ public class Crawler {
 			e.printStackTrace();
 		}
 		notVisitedList.addLast(newURL);
-		
-		//if (needToChangeLists) moveURLPair(newURL, socket);
 	}
 	
 
