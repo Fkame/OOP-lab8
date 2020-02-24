@@ -9,6 +9,7 @@ public class CrawlerHelper {
 	// Набор форматов, которые поддерживает браузер
 	public static String[] formats = {".html", ".pdf", ".java", ".xml", "txt", ".css", ".doc", ".c"};
 	
+	//public static String INDEX_ENDING = "index.html";
 	// Начало ссылки
 	//public static final String HOOK_REF = "<a href=\"";
 	
@@ -103,7 +104,7 @@ public class CrawlerHelper {
 		try {
 			info[2] = url.getContent().toString();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Cannot get content-type, this may be https protocol page");
 			info[2] = "";
 		}
 		info[3] = url.getProtocol();
@@ -114,7 +115,7 @@ public class CrawlerHelper {
 		try {
 			info[8] = url.toURI().toString();
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
+			System.out.println("Cannot get URI, this may be https protocol page");
 			info[8] = "";
 		}
 		info[9] = String.valueOf(url.getPort());
@@ -170,17 +171,20 @@ public class CrawlerHelper {
 		return line.substring(indexStart, indexEnd);
 	}
 	
-	// Отрезает от адреса .html и прочее 
+	// Очищает от мусора после адреса
+	// После определяет, указана ли ссылка в формате конечного файла, если да
+	// То из адреса вырезается имя файла с расширением
+	// То есть остается лишь каталог, в котором находится этот файл
 	public static String cutURLEndFormat(String url) {
 		//System.out.println("Before cutTrash for cut format " + url);
 		url = CrawlerHelper.cutTrashAfterFormat(url);
 		//System.out.println("After " + url);
 		
 		for (String format : formats) {
-			//if (url.indexOf(format) != -1) {
 			if (url.endsWith(format)) {
 				//System.out.println("Found " + format + " on index " + url.indexOf(format));
-				return url.substring(0, url.indexOf(format));
+				int lastCatalog = url.lastIndexOf("/");
+				return url.substring(0, lastCatalog + 1);
 			}
 		}
 		return url;
@@ -214,5 +218,15 @@ public class CrawlerHelper {
 		return url.substring(0, index);
 		
 	}
+	
+	/*
+	// Отрезка index.html
+	public static String cutIndexFromEnd(String url) {
+		if (url.endsWith(INDEX_ENDING)) {
+			return url.substring(0, url.length() - INDEX_ENDING.length());
+		}
+		return url;
+	}
+	*/
 	
 }

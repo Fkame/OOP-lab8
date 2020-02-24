@@ -156,10 +156,20 @@ public class Crawler {
 							this.createURlDepthPairObject(newUrl, nowPage.getDepth() + 1);
 						} 
 						
-						// Значит, это подкаталог, возможно у него будет мусор. После очистки можно клеить с основной ссылкойю
+						// Значит, это подкаталог, возможно у него будет мусор
+						// Или содержит название файла в конце
+                        // После очистки можно клеить с основной ссылкой
 						else {
 							//System.out.println("This ref is subcatalog!");
-							String newUrl = CrawlerHelper.cutURLEndFormat(nowPage.getURL()) + "/" + url;
+							
+							String newUrl;
+							newUrl = CrawlerHelper.cutURLEndFormat(nowPage.getURL()) + url;
+							
+							//if (oldUrl.endsWith("/")) {
+								//newUrl = CrawlerHelper.cutURLEndFormat(oldUrl) + url;
+							//} else {
+								//newUrl = CrawlerHelper.cutURLEndFormat(oldUrl) + "/" + url;
+							//}
 							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> " + newUrl + "\n");
 							this.createURlDepthPairObject(newUrl, nowPage.getDepth() + 1);
 						}
@@ -226,7 +236,7 @@ public class Crawler {
 
 			}
 			catch (UnknownHostException e) {
-				System.out.println("!!Opps, UHE catched!!, so " + nowPage.getURL() + "is not workable now!");
+				System.out.println("Opps, UnknownHostException catched, so [" + nowPage.getURL() + "] is not workable now!");
 				//e.printStackTrace();
 				//this.moveURLPair(nowPage, socket);
 				//continue;
@@ -236,6 +246,7 @@ public class Crawler {
 				//this.moveURLPair(nowPage, socket);
 				//continue;
 			}
+			
 			
 			// Перемещение сайта после просмотра в список просмотренных
 			moveURLPair(nowPage, socket);
