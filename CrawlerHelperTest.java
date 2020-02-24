@@ -11,6 +11,12 @@ public class CrawlerHelperTest {
 		System.out.println("After cut: [" + getURL + "]");
 		System.out.println("");
 		
+		testURL = "http://users.cms.caltech.edu/~donnie/cs11/java/lab2/";
+		getURL = helper.cutURLEndFormat(testURL);
+		System.out.println("Before cut: [" + testURL + "]");
+		System.out.println("After cut: [" + getURL + "]");
+		System.out.println("");
+		
 		// Тест по выделение URL из тэга
 		testURL = "<a href=\"../javastyle.html\">CS11 Java Style Guidelines</a>.  There is even a --> [../javastyle.html] --> 11, 28";
 		getURL = helper.getURLFromHTMLTag(testURL);
@@ -38,5 +44,21 @@ public class CrawlerHelperTest {
 		System.out.println("After cutting trash: [" + getURL + "]");
 		System.out.println("");
 		
+		
+		
+		/*
+		// Проверка отрезки index.html
+		testURL = " http://users.cms.caltech.edu/~donnie/cs11/java/lab1/index.html";
+		getURL = CrawlerHelper.cutIndexFromEnd(testURL);
+		System.out.println("Before cutting index.html: [" + testURL + "]");
+		System.out.println("After cutting index.html: [" + getURL + "]");
+		System.out.println("");
+		
+		testURL = " http://users.cms.caltech.edu/~donnie/cs11/java/lab1/";
+		getURL = CrawlerHelper.cutIndexFromEnd(testURL);
+		System.out.println("Before cutting index.html: [" + testURL + "]");
+		System.out.println("After cutting index.html: [" + getURL + "]");
+		System.out.println("");
+		*/
 	}
 }
