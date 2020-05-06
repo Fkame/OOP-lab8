@@ -14,26 +14,26 @@ public class Crawler {
 	public static final String BAD_REQUEST_LINE = "HTTP/1.1 400 Bad Request";
 	
 
-	// Данные для тестирования без ввода
+	// ╨Ф╨░╨╜╨╜╤Л╨╡ ╨┤╨╗╤П ╤В╨╡╤Б╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╤П ╨▒╨╡╨╖ ╨▓╨▓╨╛╨┤╨░
 	public static final String testURL = "http://users.cms.caltech.edu/~donnie/cs11/java/";
 	//public static final String testURL = "http://users.cms.caltech.edu/~donnie/cs11/java/lectures/cs11-java-lec1.pdf";
 	public static final int testDepth = 1;
 
-	// Список посещённых сайтов, и ещё непосещённых
+	// ╨б╨┐╨╕╤Б╨╛╨║ ╨┐╨╛╤Б╨╡╤Й╤С╨╜╨╜╤Л╤Е ╤Б╨░╨╣╤В╨╛╨▓, ╨╕ ╨╡╤Й╤С ╨╜╨╡╨┐╨╛╤Б╨╡╤Й╤С╨╜╨╜╤Л╤Е
 	LinkedList<URLDepthPair> notVisitedList;
 	LinkedList<URLDepthPair> visitedList;
 
-	// Глубина поиска
+	// ╨У╨╗╤Г╨▒╨╕╨╜╨░ ╨┐╨╛╨╕╤Б╨║╨░
 	int depth;
 
-	// Конструктор
+	// ╨Ъ╨╛╨╜╤Б╤В╤А╤Г╨║╤В╨╛╤А
 	public Crawler() {
 		notVisitedList = new LinkedList<URLDepthPair>();
 		visitedList = new LinkedList<URLDepthPair>();
 	}
 
 
-	// Точка входа
+	// ╨в╨╛╤З╨║╨░ ╨▓╤Е╨╛╨┤╨░
 	public static void main (String[] args) {
 
 		Crawler crawler = new Crawler();
@@ -46,7 +46,7 @@ public class Crawler {
 
 
 	/*
-	* Проход по всем сайтам на определённую глубину
+	* ╨Я╤А╨╛╤Е╨╛╨┤ ╨┐╨╛ ╨▓╤Б╨╡╨╝ ╤Б╨░╨╣╤В╨░╨╝ ╨╜╨░ ╨╛╨┐╤А╨╡╨┤╨╡╨╗╤С╨╜╨╜╤Г╤О ╨│╨╗╤Г╨▒╨╕╨╜╤Г
 	*/
 	public void startParse() {
 		System.out.println("Stating parsing:\n");
@@ -55,10 +55,10 @@ public class Crawler {
 
 		while (nowPage.getDepth() <= depth && !notVisitedList.isEmpty()) {
 
-			// Эта избыточность нужна чтобы цикл работал правильно - если произойдёт ошибка - цикл откатится вначало
-			// потому что идти далее не будет иметь смысла, значит нужно удалить элемент при ошибке, и взять новый
-			// И как раз вот здесь берётся новый, а старый удаляется из списка
-			// а код выше нужен, чтобы войти в цикл
+			// ╨н╤В╨░ ╨╕╨╖╨▒╤Л╤В╨╛╤З╨╜╨╛╤Б╤В╤М ╨╜╤Г╨╢╨╜╨░ ╤З╤В╨╛╨▒╤Л ╤Ж╨╕╨║╨╗ ╤А╨░╨▒╨╛╤В╨░╨╗ ╨┐╤А╨░╨▓╨╕╨╗╤М╨╜╨╛ - ╨╡╤Б╨╗╨╕ ╨┐╤А╨╛╨╕╨╖╨╛╨╣╨┤╤С╤В ╨╛╤И╨╕╨▒╨║╨░ - ╤Ж╨╕╨║╨╗ ╨╛╤В╨║╨░╤В╨╕╤В╤Б╤П ╨▓╨╜╨░╤З╨░╨╗╨╛
+			// ╨┐╨╛╤В╨╛╨╝╤Г ╤З╤В╨╛ ╨╕╨┤╤В╨╕ ╨┤╨░╨╗╨╡╨╡ ╨╜╨╡ ╨▒╤Г╨┤╨╡╤В ╨╕╨╝╨╡╤В╤М ╤Б╨╝╤Л╤Б╨╗╨░, ╨╖╨╜╨░╤З╨╕╤В ╨╜╤Г╨╢╨╜╨╛ ╤Г╨┤╨░╨╗╨╕╤В╤М ╤Н╨╗╨╡╨╝╨╡╨╜╤В ╨┐╤А╨╕ ╨╛╤И╨╕╨▒╨║╨╡, ╨╕ ╨▓╨╖╤П╤В╤М ╨╜╨╛╨▓╤Л╨╣
+			// ╨Ш ╨║╨░╨║ ╤А╨░╨╖ ╨▓╨╛╤В ╨╖╨┤╨╡╤Б╤М ╨▒╨╡╤А╤С╤В╤Б╤П ╨╜╨╛╨▓╤Л╨╣, ╨░ ╤Б╤В╨░╤А╤Л╨╣ ╤Г╨┤╨░╨╗╤П╨╡╤В╤Б╤П ╨╕╨╖ ╤Б╨┐╨╕╤Б╨║╨░
+			// ╨░ ╨║╨╛╨┤ ╨▓╤Л╤И╨╡ ╨╜╤Г╨╢╨╡╨╜, ╤З╤В╨╛╨▒╤Л ╨▓╨╛╨╣╤В╨╕ ╨▓ ╤Ж╨╕╨║╨╗
 			
 			//System.out.println("Trying to get next page in start of cycle");
 			nowPage = notVisitedList.getFirst();
@@ -66,12 +66,12 @@ public class Crawler {
 			Socket socket = null;
 			
 			try {
-				// Открываем сокет
+				// ╨Ю╤В╨║╤А╤Л╨▓╨░╨╡╨╝ ╤Б╨╛╨║╨╡╤В
 				//System.out.println("Trying to connect to " + nowPage.getHostName());
 				socket = new Socket(nowPage.getHostName(), HTTP_PORT);
 				System.out.println("Connection to [ " + nowPage.getURL() + " ] created!");
 
-				// Установка таймаута
+				// ╨г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╤В╨░╨╣╨╝╨░╤Г╤В╨░
 				try {
 					socket.setSoTimeout(5000);
 				}
@@ -81,22 +81,22 @@ public class Crawler {
 					continue;
 				}
 
-				// Вывод информации о текущей странице
+				// ╨Т╤Л╨▓╨╛╨┤ ╨╕╨╜╤Д╨╛╤А╨╝╨░╤Ж╨╕╨╕ ╨╛ ╤В╨╡╨║╤Г╤Й╨╡╨╣ ╤Б╤В╤А╨░╨╜╨╕╤Ж╨╡
 				CrawlerHelper.getInfoAboutUrl(nowPage.getURL(), true);
 
-				// Для отправки запросов на сервер
+				// ╨Ф╨╗╤П ╨╛╤В╨┐╤А╨░╨▓╨║╨╕ ╨╖╨░╨┐╤А╨╛╤Б╨╛╨▓ ╨╜╨░ ╤Б╨╡╤А╨▓╨╡╤А
 				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-				// Отправка запроса на получение html-страницы
+				// ╨Ю╤В╨┐╤А╨░╨▓╨║╨░ ╨╖╨░╨┐╤А╨╛╤Б╨░ ╨╜╨░ ╨┐╨╛╨╗╤Г╤З╨╡╨╜╨╕╨╡ html-╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л
 				out.println("GET " + nowPage.getPagePath() + " HTTP/1.1");
 				out.println("Host: " + nowPage.getHostName());
 				out.println("Connection: close");
 				out.println("");
 
-				// Получение ответа
+				// ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╕╨╡ ╨╛╤В╨▓╨╡╤В╨░
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				// Проверка на bad request
+				// ╨Я╤А╨╛╨▓╨╡╤А╨║╨░ ╨╜╨░ bad request
 				String line = in.readLine();
 
 				if (line.startsWith(BAD_REQUEST_LINE)) {
@@ -109,53 +109,53 @@ public class Crawler {
 					System.out.println("REQUEST IS GOOD!\n");
 				}
 
-				// Чтение основного файла
+				// ╨з╤В╨╡╨╜╨╕╨╡ ╨╛╤Б╨╜╨╛╨▓╨╜╨╛╨│╨╛ ╤Д╨░╨╣╨╗╨░
 				System.out.println("---Start of file---");
 
-				// В цикле ниже происходит поиск и сбок всех ссылок со страницы
-				// Для этого осуществляется просмотр всех строк html-кода страницы
+				// ╨Т ╤Ж╨╕╨║╨╗╨╡ ╨╜╨╕╨╢╨╡ ╨┐╤А╨╛╨╕╤Б╤Е╨╛╨┤╨╕╤В ╨┐╨╛╨╕╤Б╨║ ╨╕ ╤Б╨▒╨╛╨║ ╨▓╤Б╨╡╤Е ╤Б╤Б╤Л╨╗╨╛╨║ ╤Б╨╛ ╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л
+				// ╨Ф╨╗╤П ╤Н╤В╨╛╨│╨╛ ╨╛╤Б╤Г╤Й╨╡╤Б╤В╨▓╨╗╤П╨╡╤В╤Б╤П ╨┐╤А╨╛╤Б╨╝╨╛╤В╤А ╨▓╤Б╨╡╤Е ╤Б╤В╤А╨╛╨║ html-╨║╨╛╨┤╨░ ╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л
 				int strCount = 0;
 				int strCount2 = 0;
 				while(line != null) {
-					// На всякий случай обработка исключений, потому что bufferedReader может вполне выкинуть его
+					// ╨Э╨░ ╨▓╤Б╤П╨║╨╕╨╣ ╤Б╨╗╤Г╤З╨░╨╣ ╨╛╨▒╤А╨░╨▒╨╛╤В╨║╨░ ╨╕╤Б╨║╨╗╤О╤З╨╡╨╜╨╕╨╣, ╨┐╨╛╤В╨╛╨╝╤Г ╤З╤В╨╛ bufferedReader ╨╝╨╛╨╢╨╡╤В ╨▓╨┐╨╛╨╗╨╜╨╡ ╨▓╤Л╨║╨╕╨╜╤Г╤В╤М ╨╡╨│╨╛
 					try {
 						/*
-						* Вывод только строк с ссылками на http страницы
-						* Или на подстраницы данного хоста
-						* Или чего-то вроде ../url.html - это возврат назад и переход на другой уровень
+						* ╨Т╤Л╨▓╨╛╨┤ ╤В╨╛╨╗╤М╨║╨╛ ╤Б╤В╤А╨╛╨║ ╤Б ╤Б╤Б╤Л╨╗╨║╨░╨╝╨╕ ╨╜╨░ http ╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л
+						* ╨Ш╨╗╨╕ ╨╜╨░ ╨┐╨╛╨┤╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л ╨┤╨░╨╜╨╜╨╛╨│╨╛ ╤Е╨╛╤Б╤В╨░
+						* ╨Ш╨╗╨╕ ╤З╨╡╨│╨╛-╤В╨╛ ╨▓╤А╨╛╨┤╨╡ ../url.html - ╤Н╤В╨╛ ╨▓╨╛╨╖╨▓╤А╨░╤В ╨╜╨░╨╖╨░╨┤ ╨╕ ╨┐╨╡╤А╨╡╤Е╨╛╨┤ ╨╜╨░ ╨┤╤А╤Г╨│╨╛╨╣ ╤Г╤А╨╛╨▓╨╡╨╜╤М
 						*/
 						
-						//Извлечнение строки из html-кода
+						//╨Ш╨╖╨▓╨╗╨╡╤З╨╜╨╡╨╜╨╕╨╡ ╤Б╤В╤А╨╛╨║╨╕ ╨╕╨╖ html-╨║╨╛╨┤╨░
 						line = in.readLine();
 						strCount += 1;
 						
-						// Извлечение ссылки из тэга, если она там есть, если нет, идём к следующей строке
+						// ╨Ш╨╖╨▓╨╗╨╡╤З╨╡╨╜╨╕╨╡ ╤Б╤Б╤Л╨╗╨║╨╕ ╨╕╨╖ ╤В╤Н╨│╨░, ╨╡╤Б╨╗╨╕ ╨╛╨╜╨░ ╤В╨░╨╝ ╨╡╤Б╤В╤М, ╨╡╤Б╨╗╨╕ ╨╜╨╡╤В, ╨╕╨┤╤С╨╝ ╨║ ╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╡╨╣ ╤Б╤В╤А╨╛╨║╨╡
 						String url = CrawlerHelper.getURLFromHTMLTag(line);
 						if (url == null) continue;
 						
-						// Если ссылка ведёт на сайт с протоколом https - пропускаем
+						// ╨Х╤Б╨╗╨╕ ╤Б╤Б╤Л╨╗╨║╨░ ╨▓╨╡╨┤╤С╤В ╨╜╨░ ╤Б╨░╨╣╤В ╤Б ╨┐╤А╨╛╤В╨╛╨║╨╛╨╗╨╛╨╝ https - ╨┐╤А╨╛╨┐╤Г╤Б╨║╨░╨╡╨╝
 						if (url.startsWith("https://")) {
 							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> https-refference\n");
 							continue;
 						}
 						
-						// Если ссылка - ссылка с возвратом
+						// ╨Х╤Б╨╗╨╕ ╤Б╤Б╤Л╨╗╨║╨░ - ╤Б╤Б╤Л╨╗╨║╨░ ╤Б ╨▓╨╛╨╖╨▓╤А╨░╤В╨╛╨╝
 						if (url.startsWith("../")) {		
 							String newUrl = CrawlerHelper.urlFromBackRef(nowPage.getURL(), url);
 							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> " +  newUrl + "\n");
 							this.createURlDepthPairObject(newUrl, nowPage.getDepth() + 1);
 						} 
 						
-						// Если это новая http ссылка
+						// ╨Х╤Б╨╗╨╕ ╤Н╤В╨╛ ╨╜╨╛╨▓╨░╤П http ╤Б╤Б╤Л╨╗╨║╨░
 						else if (url.startsWith("http://")) {
 							String newUrl = CrawlerHelper.cutTrashAfterFormat(url);
 							System.out.println(strCount2 + " --> " + strCount + " |  " + url + " --> " + newUrl + "\n");
 							this.createURlDepthPairObject(newUrl, nowPage.getDepth() + 1);
 						} 
 						
-						// Значит, это подкаталог, возможно у него будет мусор
-						// Или содержит название файла в конце
-                        // После очистки можно клеить с основной ссылкой
+						// ╨Ч╨╜╨░╤З╨╕╤В, ╤Н╤В╨╛ ╨┐╨╛╨┤╨║╨░╤В╨░╨╗╨╛╨│, ╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛ ╤Г ╨╜╨╡╨│╨╛ ╨▒╤Г╨┤╨╡╤В ╨╝╤Г╤Б╨╛╤А
+						// ╨Ш╨╗╨╕ ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В ╨╜╨░╨╖╨▓╨░╨╜╨╕╨╡ ╤Д╨░╨╣╨╗╨░ ╨▓ ╨║╨╛╨╜╤Ж╨╡
+                        // ╨Я╨╛╤Б╨╗╨╡ ╨╛╤З╨╕╤Б╤В╨║╨╕ ╨╝╨╛╨╢╨╜╨╛ ╨║╨╗╨╡╨╕╤В╤М ╤Б ╨╛╤Б╨╜╨╛╨▓╨╜╨╛╨╣ ╤Б╤Б╤Л╨╗╨║╨╛╨╣
 						else {		
 							String newUrl;
 							newUrl = CrawlerHelper.cutURLEndFormat(nowPage.getURL()) + url;
@@ -184,17 +184,17 @@ public class Crawler {
 				e.printStackTrace();
 			}
 			
-			// Перемещение сайта после просмотра в список просмотренных
+			// ╨Я╨╡╤А╨╡╨╝╨╡╤Й╨╡╨╜╨╕╨╡ ╤Б╨░╨╣╤В╨░ ╨┐╨╛╤Б╨╗╨╡ ╨┐╤А╨╛╤Б╨╝╨╛╤В╤А╨░ ╨▓ ╤Б╨┐╨╕╤Б╨╛╨║ ╨┐╤А╨╛╤Б╨╝╨╛╤В╤А╨╡╨╜╨╜╤Л╤Е
 			moveURLPair(nowPage, socket);
 			
-			// Ещё одна избыточность, для правльной работы цикла в случае, когда не возникло ошибок
+			// ╨Х╤Й╤С ╨╛╨┤╨╜╨░ ╨╕╨╖╨▒╤Л╤В╨╛╤З╨╜╨╛╤Б╤В╤М, ╨┤╨╗╤П ╨┐╤А╨░╨▓╨╗╤М╨╜╨╛╨╣ ╤А╨░╨▒╨╛╤В╤Л ╤Ж╨╕╨║╨╗╨░ ╨▓ ╤Б╨╗╤Г╤З╨░╨╡, ╨║╨╛╨│╨┤╨░ ╨╜╨╡ ╨▓╨╛╨╖╨╜╨╕╨║╨╗╨╛ ╨╛╤И╨╕╨▒╨╛╨║
 			nowPage = notVisitedList.getFirst();
 		}
 	}
 
 	/*
-	* Перевод страницы из списка непросмотренных в просмотренные
-	* Оба списка работают хранят данные по времени их добавления
+	* ╨Я╨╡╤А╨╡╨▓╨╛╨┤ ╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л ╨╕╨╖ ╤Б╨┐╨╕╤Б╨║╨░ ╨╜╨╡╨┐╤А╨╛╤Б╨╝╨╛╤В╤А╨╡╨╜╨╜╤Л╤Е ╨▓ ╨┐╤А╨╛╤Б╨╝╨╛╤В╤А╨╡╨╜╨╜╤Л╨╡
+	* ╨Ю╨▒╨░ ╤Б╨┐╨╕╤Б╨║╨░ ╤А╨░╨▒╨╛╤В╨░╤О╤В ╤Е╤А╨░╨╜╤П╤В ╨┤╨░╨╜╨╜╤Л╨╡ ╨┐╨╛ ╨▓╤А╨╡╨╝╨╡╨╜╨╕ ╨╕╤Е ╨┤╨╛╨▒╨░╨▓╨╗╨╡╨╜╨╕╤П
 	*/
 	private void moveURLPair(URLDepthPair pair, Socket socket) {
 		this.visitedList.addLast(pair);
@@ -203,7 +203,7 @@ public class Crawler {
 		if (socket == null) return;
 		
 		try {
-			// Закрытие сокета
+			// ╨Ч╨░╨║╤А╤Л╤В╨╕╨╡ ╤Б╨╛╨║╨╡╤В╨░
 			socket.close();
 		}
 		catch (UnknownHostException e) {
@@ -215,14 +215,14 @@ public class Crawler {
 	}
 	
 	/*
-	* Создаёт новый объект-пару и по ноебходимости переводит из одного списка в другой
-	* Если передать булевый параметр false, то вместо socket можно отправлять null
+	* ╨б╨╛╨╖╨┤╨░╤С╤В ╨╜╨╛╨▓╤Л╨╣ ╨╛╨▒╤К╨╡╨║╤В-╨┐╨░╤А╤Г ╨╕ ╨┐╨╛ ╨╜╨╛╨╡╨▒╤Е╨╛╨┤╨╕╨╝╨╛╤Б╤В╨╕ ╨┐╨╡╤А╨╡╨▓╨╛╨┤╨╕╤В ╨╕╨╖ ╨╛╨┤╨╜╨╛╨│╨╛ ╤Б╨┐╨╕╤Б╨║╨░ ╨▓ ╨┤╤А╤Г╨│╨╛╨╣
+	* ╨Х╤Б╨╗╨╕ ╨┐╨╡╤А╨╡╨┤╨░╤В╤М ╨▒╤Г╨╗╨╡╨▓╤Л╨╣ ╨┐╨░╤А╨░╨╝╨╡╤В╤А false, ╤В╨╛ ╨▓╨╝╨╡╤Б╤В╨╛ socket ╨╝╨╛╨╢╨╜╨╛ ╨╛╤В╨┐╤А╨░╨▓╨╗╤П╤В╤М null
 	*/ 
 	private void createURlDepthPairObject(String url, int depth) {
 		
 		URLDepthPair newURL = null;
 		try{
-			// Формироване нового объекта и добавление его в список
+			// ╨д╨╛╤А╨╝╨╕╤А╨╛╨▓╨░╨╜╨╡ ╨╜╨╛╨▓╨╛╨│╨╛ ╨╛╨▒╤К╨╡╨║╤В╨░ ╨╕ ╨┤╨╛╨▒╨░╨▓╨╗╨╡╨╜╨╕╨╡ ╨╡╨│╨╛ ╨▓ ╤Б╨┐╨╕╤Б╨╛╨║
 			newURL = new URLDepthPair(url, depth);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -232,7 +232,7 @@ public class Crawler {
 	
 
 	/*
-	* Получение списков
+	* ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╕╨╡ ╤Б╨┐╨╕╤Б╨║╨╛╨▓
 	*/
 	public LinkedList<URLDepthPair> getVisitedSites() {
 		return this.visitedList;
@@ -243,7 +243,7 @@ public class Crawler {
 	}
 
 	/*
-	* Вывод в консоль результатов
+	* ╨Т╤Л╨▓╨╛╨┤ ╨▓ ╨║╨╛╨╜╤Б╨╛╨╗╤М ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В╨╛╨▓
 	*/
 
 	public void showResults() {
@@ -270,41 +270,41 @@ public class Crawler {
 
 
 	/*
-	* Проверка командной строки, ввода пользователя и добавление первого объекта URLDepthPair
-	* В список непросмотренных
-	* Если нет ввода из командной строки передавать просто null
+	* ╨Я╤А╨╛╨▓╨╡╤А╨║╨░ ╨║╨╛╨╝╨░╨╜╨┤╨╜╨╛╨╣ ╤Б╤В╤А╨╛╨║╨╕, ╨▓╨▓╨╛╨┤╨░ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨╕ ╨┤╨╛╨▒╨░╨▓╨╗╨╡╨╜╨╕╨╡ ╨┐╨╡╤А╨▓╨╛╨│╨╛ ╨╛╨▒╤К╨╡╨║╤В╨░ URLDepthPair
+	* ╨Т ╤Б╨┐╨╕╤Б╨╛╨║ ╨╜╨╡╨┐╤А╨╛╤Б╨╝╨╛╤В╤А╨╡╨╜╨╜╤Л╤Е
+	* ╨Х╤Б╨╗╨╕ ╨╜╨╡╤В ╨▓╨▓╨╛╨┤╨░ ╨╕╨╖ ╨║╨╛╨╝╨░╨╜╨┤╨╜╨╛╨╣ ╤Б╤В╤А╨╛╨║╨╕ ╨┐╨╡╤А╨╡╨┤╨░╨▓╨░╤В╤М ╨┐╤А╨╛╤Б╤В╨╛ null
 	*/
 	public void getFirstURLDepthPair(String[] args) {
 		CrawlerHelper help = new CrawlerHelper();
 
-		// Чтение аргументов из командной строки
+		// ╨з╤В╨╡╨╜╨╕╨╡ ╨░╤А╨│╤Г╨╝╨╡╨╜╤В╨╛╨▓ ╨╕╨╖ ╨║╨╛╨╝╨░╨╜╨┤╨╜╨╛╨╣ ╤Б╤В╤А╨╛╨║╨╕
 		URLDepthPair urlDepth = help.getURLDepthPairFromArgs(args);
 		if (urlDepth == null) {
 			System.out.println("Args are empty or have exception. Now you need to enter URL and depth manually!\n");
 
-			// Получение ввода от пользователей
+			// ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╕╨╡ ╨▓╨▓╨╛╨┤╨░ ╨╛╤В ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╣
 			urlDepth = help.getURLDepthPairFromInput();
 		}
 
-		// Получение и замена глубины
+		// ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╕╨╡ ╨╕ ╨╖╨░╨╝╨╡╨╜╨░ ╨│╨╗╤Г╨▒╨╕╨╜╤Л
 		this.depth = urlDepth.getDepth();
 		urlDepth.setDepth(0);
 
-		// Занесение в список
+		// ╨Ч╨░╨╜╨╡╤Б╨╡╨╜╨╕╨╡ ╨▓ ╤Б╨┐╨╕╤Б╨╛╨║
 		notVisitedList.add(urlDepth);
 
-		// Вывод первого объекта URLDepthPair
+		// ╨Т╤Л╨▓╨╛╨┤ ╨┐╨╡╤А╨▓╨╛╨│╨╛ ╨╛╨▒╤К╨╡╨║╤В╨░ URLDepthPair
 		System.out.println("First site: " + urlDepth.toString() + "\n");
 	}
 
 
 	/*
-	* Тестовый код для разработки алгоритма получения и обработки html-кода
-	* Код-прототип основного кода
+	* ╨в╨╡╤Б╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤ ╨┤╨╗╤П ╤А╨░╨╖╤А╨░╨▒╨╛╤В╨║╨╕ ╨░╨╗╨│╨╛╤А╨╕╤В╨╝╨░ ╨┐╨╛╨╗╤Г╤З╨╡╨╜╨╕╤П ╨╕ ╨╛╨▒╤А╨░╨▒╨╛╤В╨║╨╕ html-╨║╨╛╨┤╨░
+	* ╨Ъ╨╛╨┤-╨┐╤А╨╛╤В╨╛╤В╨╕╨┐ ╨╛╤Б╨╜╨╛╨▓╨╜╨╛╨│╨╛ ╨║╨╛╨┤╨░
 	*/
 	private void testParse() {
 
-		//  Настройка начального адреса
+		//  ╨Э╨░╤Б╤В╤А╨╛╨╣╨║╨░ ╨╜╨░╤З╨░╨╗╤М╨╜╨╛╨│╨╛ ╨░╨┤╤А╨╡╤Б╨░
 		URLDepthPair pair;
 		depth = testDepth;
 		try {
@@ -322,7 +322,7 @@ public class Crawler {
 
 		System.out.println("Start pair created!");
 
-		// Формирование объекта URL из строки, содержащей URL
+		// ╨д╨╛╤А╨╝╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╛╨▒╤К╨╡╨║╤В╨░ URL ╨╕╨╖ ╤Б╤В╤А╨╛╨║╨╕, ╤Б╨╛╨┤╨╡╤А╨╢╨░╤Й╨╡╨╣ URL
 		URL url = null;
 		try {
 			url = new URL(pair.getURL());
@@ -334,26 +334,26 @@ public class Crawler {
 
 		System.out.println("URL formed");
 
-		// Открытие подключения
+		// ╨Ю╤В╨║╤А╤Л╤В╨╕╨╡ ╨┐╨╛╨┤╨║╨╗╤О╤З╨╡╨╜╨╕╤П
 		try {
 			Socket socket = new Socket(url.getHost(), HTTP_PORT);
 			System.out.println("Connection to [ " + url + " ] created!");
 
 			CrawlerHelper.getInfoAboutUrl(url, true);
 
-			// Для отправки запросов на сервер
+			// ╨Ф╨╗╤П ╨╛╤В╨┐╤А╨░╨▓╨║╨╕ ╨╖╨░╨┐╤А╨╛╤Б╨╛╨▓ ╨╜╨░ ╤Б╨╡╤А╨▓╨╡╤А
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-			// Отправка запроса на получение html-страницы
+			// ╨Ю╤В╨┐╤А╨░╨▓╨║╨░ ╨╖╨░╨┐╤А╨╛╤Б╨░ ╨╜╨░ ╨┐╨╛╨╗╤Г╤З╨╡╨╜╨╕╨╡ html-╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л
 			out.println("GET " + url.getPath() + " HTTP/1.1");
 			out.println("Host: " + url.getHost());
 			out.println("Connection: close");
 			out.println("");
 
-			// Получение ответа
+			// ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╕╨╡ ╨╛╤В╨▓╨╡╤В╨░
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			// Проверка на bad request
+			// ╨Я╤А╨╛╨▓╨╡╤А╨║╨░ ╨╜╨░ bad request
 			String line = in.readLine();
 			if (line.startsWith(BAD_REQUEST_LINE)) {
 				System.out.println("ERROR: BAD REQUEST!");
@@ -362,7 +362,7 @@ public class Crawler {
 				System.out.println("REQUEST IS GOOD!\n");
 			}
 
-			// Чтение основного файла
+			// ╨з╤В╨╡╨╜╨╕╨╡ ╨╛╤Б╨╜╨╛╨▓╨╜╨╛╨│╨╛ ╤Д╨░╨╣╨╗╨░
 			System.out.println("---Start of file---");
 			//System.out.println(line);
 			int strCount = 1;
@@ -370,8 +370,8 @@ public class Crawler {
 				try {
 
 					/*
-					* Вывод только строк с ссылками на http страницы
-					* Или на подстраницы данного хоста, имеющие http протокол
+					* ╨Т╤Л╨▓╨╛╨┤ ╤В╨╛╨╗╤М╨║╨╛ ╤Б╤В╤А╨╛╨║ ╤Б ╤Б╤Б╤Л╨╗╨║╨░╨╝╨╕ ╨╜╨░ http ╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л
+					* ╨Ш╨╗╨╕ ╨╜╨░ ╨┐╨╛╨┤╤Б╤В╤А╨░╨╜╨╕╤Ж╤Л ╨┤╨░╨╜╨╜╨╛╨│╨╛ ╤Е╨╛╤Б╤В╨░, ╨╕╨╝╨╡╤О╤Й╨╕╨╡ http ╨┐╤А╨╛╤В╨╛╨║╨╛╨╗
 					*/
 					line = in.readLine();
 
@@ -383,9 +383,9 @@ public class Crawler {
 						int indexEnd = line.indexOf("\"", indexStart);
 						String subRef = line.substring(indexStart, indexEnd);
 
-						// Полученная ссылка, скорее всего подкаталог, нужно объеденить с предыдущим путем,
-						// преобразовать полученную строку в url, и проверить протокол
-						// Или не нужно, это ведь подкаталог всё-таки, значит протоклы должны совпадать
+						// ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╜╨░╤П ╤Б╤Б╤Л╨╗╨║╨░, ╤Б╨║╨╛╤А╨╡╨╡ ╨▓╤Б╨╡╨│╨╛ ╨┐╨╛╨┤╨║╨░╤В╨░╨╗╨╛╨│, ╨╜╤Г╨╢╨╜╨╛ ╨╛╨▒╤К╨╡╨┤╨╡╨╜╨╕╤В╤М ╤Б ╨┐╤А╨╡╨┤╤Л╨┤╤Г╤Й╨╕╨╝ ╨┐╤Г╤В╨╡╨╝,
+						// ╨┐╤А╨╡╨╛╨▒╤А╨░╨╖╨╛╨▓╨░╤В╤М ╨┐╨╛╨╗╤Г╤З╨╡╨╜╨╜╤Г╤О ╤Б╤В╤А╨╛╨║╤Г ╨▓ url, ╨╕ ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М ╨┐╤А╨╛╤В╨╛╨║╨╛╨╗
+						// ╨Ш╨╗╨╕ ╨╜╨╡ ╨╜╤Г╨╢╨╜╨╛, ╤Н╤В╨╛ ╨▓╨╡╨┤╤М ╨┐╨╛╨┤╨║╨░╤В╨░╨╗╨╛╨│ ╨▓╤Б╤С-╤В╨░╨║╨╕, ╨╖╨╜╨░╤З╨╕╤В ╨┐╤А╨╛╤В╨╛╨║╨╗╤Л ╨┤╨╛╨╗╨╢╨╜╤Л ╤Б╨╛╨▓╨┐╨░╨┤╨░╤В╤М
 						String fullSubRef = url + subRef;
 						URL newUrl = URLDepthPair.getUrlObjectFromUrlString(fullSubRef);
 						String newUrlProtocol = newUrl.getProtocol();
